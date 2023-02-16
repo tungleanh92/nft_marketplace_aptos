@@ -124,10 +124,6 @@ module marketplace_addr::marketplace {
         locked_coins: Table<TokenId, Coin<CoinType>>,
     }
 
-    struct TokenEscrowOffer has key {
-        locked_tokens: Table<TokenId, Token>
-    }
-
     public entry fun init_market(sender: &signer, owner_cut: u64) {
         let sender_addr = signer::address_of(sender);
         let (market_signer, market_cap) = account::create_resource_account(sender, x"01");
@@ -635,11 +631,6 @@ module marketplace_addr::marketplace {
             2,
             2,
             2,
-            // vector<String>[],
-            // vector<vector<u8>>[],
-            // vector<String>[],
-            // vector<bool>[false, false, false],
-            // vector<bool>[false, false, false, false, false],
         );
         
         create_listing(
@@ -683,11 +674,6 @@ module marketplace_addr::marketplace {
             2,
             2,
             2,
-            // vector<String>[],
-            // vector<vector<u8>>[],
-            // vector<String>[],
-            // vector<bool>[false, false, false],
-            // vector<bool>[false, false, false, false, false],
         );
         
         create_listing(
@@ -779,11 +765,6 @@ module marketplace_addr::marketplace {
             2,
             2,
             2,
-            // vector<String>[],
-            // vector<vector<u8>>[],
-            // vector<String>[],
-            // vector<bool>[false, false, false],
-            // vector<bool>[false, false, false, false, false],
         );
 
         create_listing(
@@ -828,11 +809,6 @@ module marketplace_addr::marketplace {
             2,
             2,
             2,
-            // vector<String>[],
-            // vector<vector<u8>>[],
-            // vector<String>[],
-            // vector<bool>[false, false, false],
-            // vector<bool>[false, false, false, false, false],
         );
 
         // initial auction

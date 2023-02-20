@@ -8,10 +8,9 @@ compiled_package_info:
     aptos_token: "0000000000000000000000000000000000000000000000000000000000000003"
     core_resources: 000000000000000000000000000000000000000000000000000000000a550c18
     marketplace_addr: 989002fc0ddc7b17966beafac7439546acb55b311deb452513d4e16c5b4f6c06
-    nft_marketplace: 989002fc0ddc7b17966beafac7439546acb55b311deb452513d4e16c5b4f6c06
     std: "0000000000000000000000000000000000000000000000000000000000000001"
     vm_reserved: "0000000000000000000000000000000000000000000000000000000000000000"
-  source_digest: A8D8B635DC9FFAF5AC82BEE28FED7496172C8AD245F29805B5682C4FB40812FA
+  source_digest: 125858774708A4C6D7CEDFB12BB97491AD29975FCAAEB355F83C2F181410B8AB
   build_flags:
     dev_mode: false
     test_mode: false
@@ -19,8 +18,7 @@ compiled_package_info:
     generate_abis: false
     install_dir: ~
     force_recompilation: false
-    additional_named_addresses:
-      nft_marketplace: 989002fc0ddc7b17966beafac7439546acb55b311deb452513d4e16c5b4f6c06
+    additional_named_addresses: {}
     architecture: ~
     fetch_deps_only: false
     skip_fetch_latest_git_deps: false

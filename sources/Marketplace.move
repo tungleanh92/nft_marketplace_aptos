@@ -26,7 +26,7 @@ module marketplace_addr::marketplace {
     const ERROR_MARKET_ALREADY_INITIALIZED: u64 = 8;
     const ERROR_ITEM_NOT_AUCTION: u64 = 9;
     const ERROR_NOT_AUTHORIZED: u64 = 10;
-    const ERROR_ITEM_AUCTION: u64 = 9;
+    const ERROR_ITEM_AUCTION: u64 = 11;
 
     struct TokenCap has key {
         cap: SignerCapability,
@@ -79,7 +79,7 @@ module marketplace_addr::marketplace {
         seller: address,
         starting_price: u64,
         token: Option<Token>,
-        duration: u64,
+        end_at: u64,
         started_at: u64,
         highest_bidder: Option<address>,
         highest_price: u64,
@@ -165,7 +165,7 @@ module marketplace_addr::marketplace {
         token_name: String,
         property_version: u64,
         price: u64,
-        duration: u64, 
+        end_at: u64, 
         started_at: u64, 
         is_auction: bool,
     ) acquires ListedItemsData, TokenCap {
@@ -174,7 +174,7 @@ module marketplace_addr::marketplace {
             sender, 
             token_id, 
             price, 
-            duration, 
+            end_at, 
             started_at, 
             is_auction
         );
@@ -184,7 +184,7 @@ module marketplace_addr::marketplace {
         sender: &signer, 
         token_id: TokenId,
         starting_price: u64, 
-        duration: u64, 
+        end_at: u64, 
         started_at: u64, 
         is_auction: bool,
     ) acquires ListedItemsData, TokenCap {
@@ -211,7 +211,7 @@ module marketplace_addr::marketplace {
                 id: token_id,
                 starting_price,
                 seller: sender_addr,
-                duration,
+                duration: end_at - started_at,
                 timestamp: timestamp::now_seconds(),
                 listing_id,
                 is_auction,
@@ -226,7 +226,7 @@ module marketplace_addr::marketplace {
             seller: sender_addr,
             starting_price,
             token: some(token),
-            duration,
+            end_at,
             started_at,
             highest_bidder: option::none(),
             highest_price: 0,
@@ -263,7 +263,7 @@ module marketplace_addr::marketplace {
         let seller = listed_item.seller;
 
         assert!(sender_addr != seller, ERROR_INVALID_BUYER);
-        assert!(is_auction_active(listed_item.started_at, listed_item.duration), ERROR_AUCTION_INACTIVE);
+        assert!(is_auction_active(listed_item.started_at, listed_item.end_at), ERROR_AUCTION_INACTIVE);
         assert!(price > listed_item.highest_price, ERROR_INSUFFICIENT_BID);
         assert!(listed_item.is_auction == true, ERROR_ITEM_NOT_AUCTION);
 
@@ -343,7 +343,7 @@ module marketplace_addr::marketplace {
             seller: _,
             starting_price: _,
             token,
-            duration: _,
+            end_at: _,
             started_at: _,
             highest_bidder: _,
             highest_price: _,
@@ -386,7 +386,7 @@ module marketplace_addr::marketplace {
         // };
 
         assert!(listed_item.is_auction == true, ERROR_ITEM_NOT_AUCTION);
-        assert!(is_auction_complete(listed_item.started_at, listed_item.duration), ERROR_AUCTION_NOT_COMPLETE);
+        assert!(is_auction_complete(listed_item.started_at, listed_item.end_at), ERROR_AUCTION_NOT_COMPLETE);
         assert!(sender_addr == option::extract(&mut listed_item.highest_bidder), ERROR_NOT_CLAIMABLE);
 
         event::emit_event<ClaimTokenEvent>(
@@ -443,7 +443,7 @@ module marketplace_addr::marketplace {
             seller: _,
             starting_price: _,
             token,
-            duration: _,
+            end_at: _,
             started_at: _,
             highest_bidder: _,
             highest_price: _,
@@ -528,7 +528,7 @@ module marketplace_addr::marketplace {
             seller: _,
             starting_price: _,
             token,
-            duration: _,
+            end_at: _,
             started_at: _,
             highest_bidder: _,
             highest_price: _,
@@ -580,9 +580,9 @@ module marketplace_addr::marketplace {
         })
     } 
 
-    fun is_auction_active(started_at: u64, duration: u64): bool {
+    fun is_auction_active(started_at: u64, end_at: u64): bool {
         let current_time = timestamp::now_seconds();
-        current_time <= started_at + duration && current_time >= started_at
+        current_time > started_at && current_time < end_at
     }
 
     fun is_auction_complete(started_at: u64, duration: u64): bool {

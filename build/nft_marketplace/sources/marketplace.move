@@ -26,7 +26,7 @@ module marketplace_addr::marketplace {
     const ERROR_MARKET_ALREADY_INITIALIZED: u64 = 8;
     const ERROR_ITEM_NOT_AUCTION: u64 = 9;
     const ERROR_NOT_AUTHORIZED: u64 = 10;
-    const ERROR_ITEM_AUCTION: u64 = 9;
+    const ERROR_ITEM_AUCTION: u64 = 11;
 
     struct TokenCap has key {
         cap: SignerCapability,
@@ -122,10 +122,6 @@ module marketplace_addr::marketplace {
 
     struct CoinEscrow<phantom CoinType> has key {
         locked_coins: Table<TokenId, Coin<CoinType>>,
-    }
-
-    struct TokenEscrowOffer has key {
-        locked_tokens: Table<TokenId, Token>
     }
 
     public entry fun init_market(sender: &signer, owner_cut: u64) {
@@ -635,11 +631,6 @@ module marketplace_addr::marketplace {
             2,
             2,
             2,
-            // vector<String>[],
-            // vector<vector<u8>>[],
-            // vector<String>[],
-            // vector<bool>[false, false, false],
-            // vector<bool>[false, false, false, false, false],
         );
         
         create_listing(
@@ -683,11 +674,6 @@ module marketplace_addr::marketplace {
             2,
             2,
             2,
-            // vector<String>[],
-            // vector<vector<u8>>[],
-            // vector<String>[],
-            // vector<bool>[false, false, false],
-            // vector<bool>[false, false, false, false, false],
         );
         
         create_listing(
@@ -779,11 +765,6 @@ module marketplace_addr::marketplace {
             2,
             2,
             2,
-            // vector<String>[],
-            // vector<vector<u8>>[],
-            // vector<String>[],
-            // vector<bool>[false, false, false],
-            // vector<bool>[false, false, false, false, false],
         );
 
         create_listing(
@@ -828,11 +809,6 @@ module marketplace_addr::marketplace {
             2,
             2,
             2,
-            // vector<String>[],
-            // vector<vector<u8>>[],
-            // vector<String>[],
-            // vector<bool>[false, false, false],
-            // vector<bool>[false, false, false, false, false],
         );
 
         // initial auction
